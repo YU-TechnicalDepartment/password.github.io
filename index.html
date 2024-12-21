@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パスワード生成ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, select, label, button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+        }
+        button {
+            cursor: pointer;
+            background-color: #26A79A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        #password {
+            margin-top: 20px;
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>パスワード生成ツール</h1>
+        <label for="length">パスワードの長さ:</label>
+        <select id="length">
+            <option value="8">8</option>
+            <option value="12">12</option>
+            <option value="16">16</option>
+            <option value="20">20</option>
+        </select>
+
+        <label><input type="checkbox" id="includeLowercase" checked onchange="validateCheckboxes()"> 小文字を含む</label>
+        <label><input type="checkbox" id="includeUppercase" checked onchange="validateCheckboxes()"> 大文字を含む</label>
+        <label><input type="checkbox" id="includeNumbers" checked onchange="validateCheckboxes()"> 数字を含む</label>
+        <label><input type="checkbox" id="includeSymbols" checked onchange="validateCheckboxes()"> 記号を含む</label>
+
+        <button onclick="generatePassword()">パスワード生成</button>
+        <input type="text" id="password" placeholder="生成されたパスワードがここに表示されます" readonly>
+    </div>
+    
+    <script>
+        function validateCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let checkedCount = 0;
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    checkedCount++;
+                }
+            });
+            if (checkedCount === 0) {
+                alert("少なくとも1つのオプションを選択してください。");
+                event.target.checked = true;
+            }
+        }
+
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeLowercase = document.getElementById('includeLowercase').checked;
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+            
+            const lowercase = "abcdefghijklmnopqrstuvwxyz";
+            const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const numbers = "0123456789";
+            const symbols = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+            
+            let charset = "";
+            if (includeLowercase) charset += lowercase;
+            if (includeUppercase) charset += uppercase;
+            if (includeNumbers) charset += numbers;
+            if (includeSymbols) charset += symbols;
+            
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                let randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            
+            document.getElementById('password').value = password;
+        }
+    </script>
+</body>
+</html>
